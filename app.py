@@ -167,17 +167,18 @@ if st.session_state['documents']:
             st.subheader("✅ Answer:")
             st.success(answer)
 
-            st.subheader("📚 Sources Used:")
-            seen = set()
-            for doc in results:
-                src = doc.metadata.get("source", "Unknown")
-                page = doc.metadata.get("page")
-                key = (src, page)
-                if key not in seen:
-                    seen.add(key)
-                    if page:
-                        st.markdown(f"- {src} (Page {page})")
-                    else:
-                        st.markdown(f"- {src}")
+            if "Answer not found in the provided content." not in answer:
+                st.subheader("📚 Sources Used:")
+                seen = set()
+                for doc in results:
+                    src = doc.metadata.get("source", "Unknown")
+                    page = doc.metadata.get("page")
+                    key = (src, page)
+                    if key not in seen:
+                        seen.add(key)
+                        if page:
+                            st.markdown(f"- {src} (Page {page})")
+                        else:
+                            st.markdown(f"- {src}")
         else:
             st.warning("⚠️ No relevant documents found.")
