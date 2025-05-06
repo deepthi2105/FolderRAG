@@ -1,6 +1,6 @@
 # 📂 FolderRAG
 
-[🌐 Launch the App](https://your-streamlit-deployment-url)
+[🌐 Launch the App]([https://your-streamlit-deployment-url](https://folderrag-ecgznykhrmhywjjru3zydb.streamlit.app/))
 
 **FolderRAG** is a Streamlit-based application that enables question-answering over multiple documents stored in a local folder. It uses Retrieval-Augmented Generation (RAG) with Azure OpenAI to answer user queries by referencing only the provided document content.
 
