@@ -1,10 +1,12 @@
 # 📂 FolderRAG
 
+[🌐 Launch the App](https://your-streamlit-deployment-url)
+
 **FolderRAG** is a Streamlit-based application that enables question-answering over multiple documents stored in a local folder. It uses Retrieval-Augmented Generation (RAG) with Azure OpenAI to answer user queries by referencing only the provided document content.
 
 ### 🔍 Key Features
 
-- Load a folder containing PDF, DOCX, or TXT files
+- Upload a ZIP file containing PDF, DOCX, or TXT files
 - Automatically extract and chunk content for semantic retrieval
 - Generate embeddings using Azure OpenAI and perform similarity search with FAISS
 - Accurately answer user questions using only the matched document chunks
@@ -12,7 +14,7 @@
 
 ### 📚 Use Case
 
-Ideal for analyzing research papers, technical manuals, legal docs, or project archives — all in one place. Ensures transparency by showing exactly where answers were sourced from.
+Ideal for analyzing multiple documents at once — such as research papers, technical manuals, or legal files. Just zip and upload. The app ensures transparency by showing which documents and pages the answers came from.
 
 ---
 
