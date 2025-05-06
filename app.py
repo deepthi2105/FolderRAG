@@ -122,28 +122,35 @@ st.caption("Enter a folder path containing PDF, DOCX, or TXT files ➔ Summarize
 if 'documents' not in st.session_state:
     st.session_state['documents'] = []
 
-folder_path = st.text_input("Enter local folder path containing documents (PDF, DOCX, TXT):")
+import zipfile
+import tempfile
 
-if folder_path and st.button("Process Folder"):
-    supported_exts = ["pdf", "docx", "txt"]
-    all_docs = []
+zip_file = st.file_uploader("Upload a ZIP file containing documents (PDF, DOCX, TXT):", type="zip")
 
-    for root, dirs, files in os.walk(folder_path):
-        for file_name in files:
-            ext = file_name.split(".")[-1].lower()
-            if ext in supported_exts:
-                full_path = os.path.join(root, file_name)
-                with open(full_path, "rb") as f:
-                    f_bytes = io.BytesIO(f.read())
-                    f_bytes.name = file_name
-                    docs = extract_documents(f_bytes)
-                    all_docs.extend(docs)
+if zip_file and st.button("Process ZIP"):
+    with tempfile.TemporaryDirectory() as tmpdir:
+        with zipfile.ZipFile(zip_file, "r") as zip_ref:
+            zip_ref.extractall(tmpdir)
 
-    if all_docs:
-        st.session_state['documents'] = split_documents(all_docs)
-        st.success(f"✅ Processed {len(st.session_state['documents'])} chunks from {len(all_docs)} documents.")
-    else:
-        st.warning("⚠️ No valid documents found in the folder.")
+        supported_exts = ["pdf", "docx", "txt"]
+        all_docs = []
+
+        for root, dirs, files in os.walk(tmpdir):
+            for file_name in files:
+                ext = file_name.split(".")[-1].lower()
+                if ext in supported_exts:
+                    full_path = os.path.join(root, file_name)
+                    with open(full_path, "rb") as f:
+                        f_bytes = io.BytesIO(f.read())
+                        f_bytes.name = file_name
+                        docs = extract_documents(f_bytes)
+                        all_docs.extend(docs)
+
+        if all_docs:
+            st.session_state['documents'] = split_documents(all_docs)
+            st.success(f"✅ Processed {len(st.session_state['documents'])} chunks from {len(all_docs)} documents.")
+        else:
+            st.warning("⚠️ No valid documents found in the ZIP.")
 
 if st.session_state['documents']:
     if st.button("Summarize All Files"):
