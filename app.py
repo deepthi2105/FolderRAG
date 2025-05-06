@@ -73,20 +73,23 @@ def retrieve_documents(query, documents, top_k=5):
 
 def ask_llm(context, question):
     prompt = f"""
-You are a helpful assistant. Use only the given context to answer the user's question. Do not use prior knowledge.
+You are a helpful assistant. Use only the context provided below to answer the question.
 
-If the answer is not available in the context, respond with:
+Do not use any external or prior knowledge — only what is directly in the context.
+
+If the answer is not present in the context, say:
 "Answer not found in the provided content."
 
-Context:
+<context>
 {context}
+</context>
 
 Question: {question}
 """
     response = client.chat.completions.create(
         model=os.getenv("AZURE_OPENAI_DEPLOYMENT"),
         messages=[{"role": "system", "content": prompt}],
-        temperature=0.2,
+        temperature=0.0,
         max_tokens=700
     )
     return response.choices[0].message.content

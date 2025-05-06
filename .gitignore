@@ -1,0 +1,33 @@
+# Python cache and compiled files
+__pycache__/
+*.py[cod]
+*.so
+*.egg
+*.egg-info/
+dist/
+build/
+
+# Environments
+.env
+.env.*
+.venv/
+venv/
+env/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+
+# Notebooks (if any)
+.ipynb_checkpoints/
+
+# FAISS or model index files (if added later)
+*.faiss
+*.index
+
+# VSCode / PyCharm config
+.vscode/
+.idea/
