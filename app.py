@@ -46,7 +46,7 @@ def extract_documents(file):
     return []
 
 # ---------------------- Chunking & Embedding ----------------------
-def split_documents(documents, chunk_size=500, chunk_overlap=50):
+def split_documents(documents, chunk_size=1000, chunk_overlap=50):
     splitter = RecursiveCharacterTextSplitter(chunk_size=chunk_size, chunk_overlap=chunk_overlap)
     return splitter.split_documents(documents)
 
@@ -73,7 +73,8 @@ def retrieve_documents(query, documents, top_k=5):
         openai_api_base=os.getenv("AZURE_OPENAI_ENDPOINT"),
         openai_api_version="2023-12-01-preview",
         deployment=os.getenv("AZURE_EMBEDDING_DEPLOYMENT"),
-        chunk_size=1000
+        chunk_size=1000,
+        validate_base_url=False
     )
     query_embedding = np.array(embed_model.embed_query(query)).reshape(1, -1)
     embeddings = embed_model.embed_documents([doc.page_content for doc in documents])
