@@ -55,7 +55,8 @@ def embed_documents_openai(documents):
         openai_api_key=os.getenv("AZURE_OPENAI_API_KEY"),
         openai_api_base=os.getenv("AZURE_OPENAI_ENDPOINT"),
         openai_api_version="2023-12-01-preview",
-        deployment=os.getenv("AZURE_EMBEDDING_DEPLOYMENT")
+        deployment=os.getenv("AZURE_EMBEDDING_DEPLOYMENT"),
+        chunk_size=1000
     )
     embeddings = embed_model.embed_documents([doc.page_content for doc in documents])
     return np.array(embeddings)
@@ -71,7 +72,8 @@ def retrieve_documents(query, documents, top_k=5):
         openai_api_key=os.getenv("AZURE_OPENAI_API_KEY"),
         openai_api_base=os.getenv("AZURE_OPENAI_ENDPOINT"),
         openai_api_version="2023-12-01-preview",
-        deployment=os.getenv("AZURE_EMBEDDING_DEPLOYMENT")
+        deployment=os.getenv("AZURE_EMBEDDING_DEPLOYMENT"),
+        chunk_size=1000
     )
     query_embedding = np.array(embed_model.embed_query(query)).reshape(1, -1)
     embeddings = embed_model.embed_documents([doc.page_content for doc in documents])
