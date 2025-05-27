@@ -7,7 +7,7 @@ import docx
 import numpy as np
 import faiss
 from langchain.text_splitter import RecursiveCharacterTextSplitter
-from langchain_community.embeddings import OpenAIEmbeddings
+from langchain.embeddings import AzureOpenAIEmbeddings
 from langchain.docstore.document import Document
 from openai import AzureOpenAI
 
@@ -51,7 +51,12 @@ def split_documents(documents, chunk_size=500, chunk_overlap=50):
     return splitter.split_documents(documents)
 
 def embed_documents_openai(documents):
-    embed_model = OpenAIEmbeddings(openai_api_key=os.getenv("OPENAI_API_KEY"))
+    embed_model = AzureOpenAIEmbeddings(
+        openai_api_key=os.getenv("AZURE_OPENAI_API_KEY"),
+        openai_api_base=os.getenv("AZURE_OPENAI_ENDPOINT"),
+        openai_api_version="2023-12-01-preview",
+        deployment=os.getenv("AZURE_EMBEDDING_DEPLOYMENT")
+    )
     embeddings = embed_model.embed_documents([doc.page_content for doc in documents])
     return np.array(embeddings)
 
@@ -62,7 +67,12 @@ def build_faiss_index(embeddings):
 
 # ---------------------- Retrieval and QA ----------------------
 def retrieve_documents(query, documents, top_k=5):
-    embed_model = OpenAIEmbeddings(openai_api_key=os.getenv("OPENAI_API_KEY"))
+    embed_model = AzureOpenAIEmbeddings(
+        openai_api_key=os.getenv("AZURE_OPENAI_API_KEY"),
+        openai_api_base=os.getenv("AZURE_OPENAI_ENDPOINT"),
+        openai_api_version="2023-12-01-preview",
+        deployment=os.getenv("AZURE_EMBEDDING_DEPLOYMENT")
+    )
     query_embedding = np.array(embed_model.embed_query(query)).reshape(1, -1)
     embeddings = embed_model.embed_documents([doc.page_content for doc in documents])
     embeddings = np.array(embeddings)
